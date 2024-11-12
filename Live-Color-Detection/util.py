@@ -1,18 +1,15 @@
+# getting upper and lower limits of a color in HSV space
 import cv2
 import numpy as np
 
-# live video capture
-cap = cv2.VideoCapture(0)
+def get_limits (color):
+    col = np.uint8([[color]]) #insert bgr value to be converted to hsv
+    hsvCol = cv2.cvtColor (col, cv2.COLOR_BGR2HSV)
 
-while True:
-    # ret checks if frame is successfully read, frame stores frame data
-    ret, frame = cap.read()
-    cv2.imshow('frame', frame)
+    lowerLimit = hsvCol[0][0][0] - 10, 100, 100
+    upperLimit = hsvCol[0][0][0] + 10, 255, 255
 
-    # terminating after keypress
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+    lowerLimit = np.array(lowerLimit, dtype=np.uint8)
+    upperLimit = np.array(upperLimit, dtype=np.uint8)
 
-# terminate the video
-cap.release()
-cv2.destroyAllWindows()
+    return lowerLimit, upperLimit
